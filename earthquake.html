@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="main">
 <head>
-<title>  Earthquake Data  </title>
+<title>  Shaky :)  </title>
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" href="./earthquake.css">
 <link rel="stylesheet" href="./leaflet.css"/>
@@ -14,7 +14,7 @@
             <nav class="navbar navbar-default oddRow">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Shaky!!</a>
+                <b>    <a class="navbar-brand" href="/">Shaky :)</a> </b>
                 </div>
 
                 <ul class="nav navbar-nav navbar-right ">
@@ -33,8 +33,8 @@
 	
      
      <div class="jumbotron">	
-<h1> Earthquake 
-Data sanvi </h1>
+<h1> Earthquake Data </h1> 
+<h4> Be prepared to feel the shake :)</h4>
 </div>
 	
 
@@ -65,7 +65,8 @@ Data sanvi </h1>
     <th> Seismic Stations</th>
     
   </tr>
-		<tr ng-repeat=" hour_feature in hour_features | object2Array | orderBy:orderByField:reverse | filter:query_hour "  ng-class ="{oddRow: $index % 2 == 0}" >
+		
+	<tr ng-repeat=" hour_feature in hour_features | object2Array | orderBy:orderByField:reverse | filter:query_hour "  ng-class ="{oddRow: $index % 2 == 0}" >
 			<td>{{ hour_feature.properties.place}} <span class="glyphicon glyphicon-map-marker"></span>  </td>
 			<td> <kbd>{{ hour_feature.properties.mag}} </kbd></td>
 			<td> {{ hour_feature.geometry.coordinates[2]}} </td>
@@ -73,6 +74,7 @@ Data sanvi </h1>
 			<td> {{ hour_feature.properties.felt}} </td>
 			<td> {{ hour_feature.properties.alert}} </td>
 			<td> {{ hour_feature.properties.nst}} </td>
+			
 		</tr>  
 		</table>
 		
