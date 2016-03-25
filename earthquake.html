@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html ng-app="main">
+<head>
+<title>  Earthquake Data  </title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="./earthquake.css">
+<link rel="stylesheet" href="./leaflet.css"/>
+
+</head>
+<body>
+
+<!-- HEADER AND NAVBAR -->
+        <header>
+            <nav class="navbar navbar-default oddRow">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Shaky!!</a>
+                </div>
+
+                <ul class="nav navbar-nav navbar-right ">
+                    <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="#about"><i class="fa fa-shield"></i> Seismic Waves </a></li>
+                    <li><a href="#contact"><i class="fa fa-comment"></i> Articles</a></li>
+                    
+                </ul>
+            </div>
+            </nav>
+        </header>
+
+
+
+<div class ="container-fluid" ng-controller="mainCtrl" ng-cloak >
+	
+     
+     <div class="jumbotron">	
+<h1> Earthquake 
+Data </h1>
+</div>
+	
+
+
+	<div class ="row">
+		<div class="col-sm-6" class="active" >
+		
+		<h2><span class="label label-default">Last Hour</span> <span class="badge"> {{ hour_metadata.count  }} </span></h2>
+			
+		
+				
+			<form class="navbar-form " role="search">
+			    <div class="form-group">
+			        <input type="text" class="form-control" placeholder="Search" ng-model="query_hour">
+			    </div>
+			    
+			</form>
+		
+		
+				<table class="table table-condensed table-bordered table-hover table-responsive">
+		<tr>
+    <th><a href="" ng-click="orderByField = 'place'; reverse=!reverse" > Place </a> </th>
+    <th><a href="" ng-click="orderByField = 'mag'; reverse=!reverse" > Mag </a></th>
+    <th>Depth</th>
+    <th>Flood</th>
+    <th>Felt Reported</th>
+    <th>Alert</th>
+    <th> Seismic Stations</th>
+    
+  </tr>
+		<tr ng-repeat=" hour_feature in hour_features | object2Array | orderBy:orderByField:reverse | filter:query_hour "  ng-class ="{oddRow: $index % 2 == 0}" >
+			<td>{{ hour_feature.properties.place}} <span class="glyphicon glyphicon-map-marker"></span>  </td>
+			<td> <kbd>{{ hour_feature.properties.mag}} </kbd></td>
+			<td> {{ hour_feature.geometry.coordinates[2]}} </td>
+			<td> {{ hour_feature.properties.tsunami == 0 ? 'N' : 'Y' }} </td>
+			<td> {{ hour_feature.properties.felt}} </td>
+			<td> {{ hour_feature.properties.alert}} </td>
+			<td> {{ hour_feature.properties.nst}} </td>
+		</tr>  
+		</table>
+		
+				<leaflet geojson="geojson_hour" legend="legend" defaults="defaults" width="100%" height="480px"></leaflet>
+		
+		</div>
+
+		<h2><span class="label label-default">Yesterday</span> <span class="badge"> {{ lastDay_metadata.count  }} </span></h2>
+		<div class="col-sm-6" >
+			<form class="navbar-form " role="search">
+			    <div class="form-group">
+			        <input type="text" class="form-control" placeholder="Search" ng-model="query">
+			    </div>
+			    
+			</form>
+
+			
+	
+		<table class="table table-condensed table-bordered table-hover table-responsive">
+		<tr>
+    <th> Place </th>
+    <th>Mag </th>
+    <th>Depth</th>
+    <th>Flood</th>
+    <th>Felt Reported</th>
+    <th>Alert</th>
+    <th> Seismic Stations</th>
+  </tr>
+		<tr ng-repeat=" lastDay_feature in lastDay_features | object2Array | orderBy:'-properties.mag' | filter:query |  startFrom:currentPage*pageSize | limitTo:pageSize" ng-class ="{oddRow: $index % 2 == 0}" >
+			<td>{{ lastDay_feature.properties.place}} <span class="glyphicon glyphicon-map-marker"></span>  </td>
+			<td > <kbd>{{ lastDay_feature.properties.mag}} </kbd> </td>
+			<td> {{ lastDay_feature.geometry.coordinates[2]}} </td>
+			<td> {{ lastDay_feature.properties.tsunami == 0 ? 'N' : 'Y' }}  </td>
+			<td> {{ lastDay_feature.properties.felt}} </td>
+				<td ng-class="{'label label-success' : {{ lastDay_feature.properties.alert == 'green'}} }"> {{ lastDay_feature.properties.alert }} </td>
+				<td> {{ lastDay_feature.properties.nst}} </td>
+
+		</tr>  
+		</table>
+		
+		
+		<button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+ 	       Previous
+    	</button>
+    			{{currentPage+1}}/{{numberOfPages()}}
+    	<button ng-disabled="currentPage >= lastDay_features.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+        	Next
+    	</button>
+    	
+    		<leaflet geojson="geojson" legend="legend" defaults="defaults" width="100%" height="480px"></leaflet>
+     
+    	
+    	
+		</div>
+
+
+	</div>
+</div>
+<script src="angular.min.js"></script>
+<script src='./js/leaflet.js'></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+
+<script src='./js/angular-leaflet-directive.min.js'></script>
+<script src='./js/google.js'></script>
+<script src="earthquake1.js"> </script>
+
+    
+</body>
+</html>
